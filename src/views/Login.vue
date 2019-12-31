@@ -16,6 +16,10 @@
               
               <input type="submit" class="button is-fullwidth is-success" value="Login">
             </form>
+
+            <div class="has-text-centered">
+              <router-link class="button is-text has-text-primary" to="/sign-up">Não possui conta? Cadastre-se.</router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -57,7 +61,7 @@ export default {
   watch: {
     loggedIn(newValue) {
       this.checkLogin(newValue);
-    } 
+    }
   },
 
   methods: {
