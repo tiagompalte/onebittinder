@@ -28,8 +28,15 @@ const router = new Router({
       component: SignUp
     },
     {
+      path: '/profile',
+      name: 'profile',
+      props: true,
+      component: UserShow
+    },
+    {
       path: '/user',
       name: 'user',
+      props: true,
       component: UserShow
     },
     {
