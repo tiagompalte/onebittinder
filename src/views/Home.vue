@@ -55,12 +55,13 @@
 
       likePerformed(newValue) {
         if(newValue) this.changeCurrentSelection();
-      }
+      },
     },
 
     methods: {
       ...mapActions('Match', ['loadSelectionList', 'setCurrentSelection']),
-      
+      ...mapActions(['loadGeolocation']),
+
       changeCurrentSelection() {
         let indexOfCurrent = this.selectionList.indexOf(this.currentSelection);
         if(this.selectionList.length > (indexOfCurrent + 1) ) {
@@ -72,6 +73,7 @@
     },
 
     mounted() {
+      this.loadGeolocation();
       if(this.selectionList.length == 0) this.loadSelectionList();
     },
     

@@ -2,7 +2,12 @@ import AccountService from '../services/account_service';
 
 export default {
   state: {
-    account: ""
+    account: "",
+    coordinates: {
+      lat: 0,
+      lon: 0
+    },
+    geolocationEnabled: false
   },
 
   mutations: {
@@ -25,6 +30,9 @@ export default {
       user.email = state.account.email;
       state.account = user;
       localStorage.setItem('account', JSON.stringify(user));
+    },
+    setGeolocation(state) {
+      state.geolocationEnabled = true;
     }
   },
 
@@ -43,6 +51,12 @@ export default {
       AccountService.update(state.account.id, name, college, company, description).then(user => {
         commit("update", user)
       })
+    },
+    loadGeolocation({ commit, state}) {
+      navigator.geolocation.getCurrentPosition(data => {
+        commit("setGeolocation");
+        AccountService.setGeolocation(state.account.id, data.coords.latitude, data.coords.longitude);
+      });
     }
   },
 
@@ -52,6 +66,9 @@ export default {
     },
     accountHeaders(state) {
       return { 'X-User-Email': state.account.email, 'X-User-Token': state.account.authentication_token }
+    },
+    isGeolocationEnabled(state) {
+      return state.geolocationEnabled;
     }
   }
 }
