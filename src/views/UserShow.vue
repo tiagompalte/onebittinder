@@ -1,5 +1,5 @@
 <template>
-  <span>Home</span>
+  <span>UserShow</span>
 </template>
 
 <script>

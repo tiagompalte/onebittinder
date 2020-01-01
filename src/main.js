@@ -6,6 +6,7 @@ import router from './router';
 import store from './store';
 import 'buefy/dist/buefy.css';
 import './registerServiceWorker';
+import '@fortawesome/fontawesome-free/css/all.css';
  
 Vue.use(Buefy);
  

@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '../store';
-import Home from '../views/Home.vue';
-import Login from '../views/Login.vue';
-import SignUp from '../views/SignUp.vue'
+import Home from '../views/Home';
+import Login from '../views/Login';
+import SignUp from '../views/SignUp';
+import UserShow from '../views/UserShow';
+import ChatList from '../views/ChatList';
 
 Vue.use(Router);
 
@@ -24,6 +26,16 @@ const router = new Router({
       path: '/sign-up',
       name: 'sign-up',
       component: SignUp
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: UserShow
+    },
+    {
+      path: '/chats',
+      name: 'chats',
+      component: ChatList
     }
   ],
 });

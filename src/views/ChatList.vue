@@ -1,5 +1,5 @@
 <template>
-  <span>Home</span>
+  <span>ChatList</span>
 </template>
 
 <script>
