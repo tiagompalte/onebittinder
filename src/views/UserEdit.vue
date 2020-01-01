@@ -1,5 +1,6 @@
 <template>
   <div>
+    <UserPhoto />
     <div class="columns is-mobile is-multiline">
       <div class="column is-12">
         <form @submit.prevent="update()">
@@ -42,8 +43,13 @@
   import { mapState } from 'vuex';
   import store from '../store';
   import router from '../router';
+  import UserPhoto from '../components/UserPhoto';
   
   export default {
+    components: {
+      UserPhoto
+    },
+
     computed: {
       ...mapState({
         account: state => state.Account.account
@@ -58,14 +64,8 @@
 
     methods: {
       update() {
-        store.dispatch("updateAccount", 
-          { 
-            name: this.account.name,
-            college: this.account.college, 
-            company: this.account.company, 
-            description: this.account.description
-          }
-        )
+        store.dispatch("updateAccount", { name: this.account.name, college: this.account.college, 
+                                          company: this.account.company, description: this.account.description })
       }
     }
   }
