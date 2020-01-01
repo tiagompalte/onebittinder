@@ -10,6 +10,7 @@ export default {
       state.account = user;
       localStorage.setItem('account', JSON.stringify(user));
     },
+
     loadLocalStorageAccount(state) {
       let account = localStorage.getItem('account');
       if(account) {
@@ -17,6 +18,13 @@ export default {
       } else {
         state.account = "";
       }
+    },
+
+    update(state, user) {
+      user.authentication_token = state.account.authentication_token;
+      user.email = state.account.email;
+      state.account = user;
+      localStorage.setItem('account', JSON.stringify(user));
     }
   },
 
@@ -26,8 +34,15 @@ export default {
         context.commit("performLogin", user)
       })
     },
+
     loadLocalAccount(context) {
       context.commit("loadLocalStorageAccount");
+    },
+
+    updateAccount({ commit, state }, { name, college, company, description }) {
+      AccountService.update(state.account.id, name, college, company, description).then(user => {
+        commit("update", user)
+      })
     }
   },
 

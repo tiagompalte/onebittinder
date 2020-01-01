@@ -6,6 +6,8 @@ import Login from '../views/Login';
 import SignUp from '../views/SignUp';
 import UserShow from '../views/UserShow';
 import ChatList from '../views/ChatList';
+import UserEdit from '../views/UserEdit';
+
 
 Vue.use(Router);
 
@@ -38,6 +40,11 @@ const router = new Router({
       name: 'user',
       props: true,
       component: UserShow
+    },
+    {
+      path: '/profile/edit',
+      name: 'user_edit',
+      component: UserEdit
     },
     {
       path: '/chats',
