@@ -11,9 +11,11 @@ export default {
   },
 
   mutations: {
-    performLogin(state, user) {
-      state.account = user;
-      localStorage.setItem('account', JSON.stringify(user));
+    performLogin(state, { email, password }) {
+      AccountService.login(email, password).then(user => {
+        state.account = user;
+        localStorage.setItem('account', JSON.stringify(user));
+      })
     },
 
     loadLocalStorageAccount(state) {
@@ -25,38 +27,40 @@ export default {
       }
     },
 
-    update(state, user) {
-      user.authentication_token = state.account.authentication_token;
-      user.email = state.account.email;
-      state.account = user;
-      localStorage.setItem('account', JSON.stringify(user));
+    update(state, { name, college, company, description }) {
+      AccountService.update(state.account.id, name, college, company, description).then(user => {
+        user.authentication_token = state.account.authentication_token;
+        user.email = state.account.email;
+        state.account = user;
+        localStorage.setItem('account', JSON.stringify(user));
+      })
     },
-    setGeolocation(state) {
-      state.geolocationEnabled = true;
+
+    loadGeolocation(state) {
+      navigator.geolocation.getCurrentPosition(data => {
+        state.coordinates.lat = data.coords.latitude;
+        state.coordinates.lon = data.coords.longitude;
+        state.geolocationEnabled = true;
+        AccountService.setGeolocation(state.account.id, data.coords.latitude, data.coords.longitude);
+      });
     }
   },
 
   actions: {
     login(context, { email, password }) {
-      AccountService.login(email, password).then(user => {
-        context.commit("performLogin", user)
-      })
+      context.commit("performLogin", { email, password })
     },
 
     loadLocalAccount(context) {
       context.commit("loadLocalStorageAccount");
     },
 
-    updateAccount({ commit, state }, { name, college, company, description }) {
-      AccountService.update(state.account.id, name, college, company, description).then(user => {
-        commit("update", user)
-      })
+    updateAccount(context, { name, college, company, description }) {
+      context.commit("update", { name, college, company, description })
     },
-    loadGeolocation({ commit, state}) {
-      navigator.geolocation.getCurrentPosition(data => {
-        commit("setGeolocation");
-        AccountService.setGeolocation(state.account.id, data.coords.latitude, data.coords.longitude);
-      });
+
+    loadGeolocation(context) {
+      context.commit("loadGeolocation")
     }
   },
 
@@ -64,9 +68,18 @@ export default {
     isLoggedIn(state) {
       return state.account != ""
     },
+
+
     accountHeaders(state) {
       return { 'X-User-Email': state.account.email, 'X-User-Token': state.account.authentication_token }
     },
+
+
+    accountToken(state) {
+      return state.account.authentication_token;
+    },
+
+
     isGeolocationEnabled(state) {
       return state.geolocationEnabled;
     }

@@ -1094,6 +1094,16 @@ acorn@^6.0.2, acorn@^6.0.7, acorn@^6.1.1, acorn@^6.2.1:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.0.tgz#b659d2ffbafa24baf5db1cdbb2c94a983ecd2784"
 
+actioncable-vue@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/actioncable-vue/-/actioncable-vue-1.5.1.tgz#43dceb877be88d2dd087c188a27eac896cb2f62e"
+  dependencies:
+    actioncable "^5.2.3"
+
+actioncable@^5.2.3:
+  version "5.2.4"
+  resolved "https://registry.yarnpkg.com/actioncable/-/actioncable-5.2.4.tgz#744f555f16d87413044f81074a9cc4d2cf416502"
+
 address@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/address/-/address-1.1.2.tgz#bf1116c9c758c51b7a933d296b72c221ed9428b6"
