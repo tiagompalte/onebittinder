@@ -14,6 +14,7 @@ export default {
       state.alert.type = type;
       state.alert.message = message;
       state.alert.isActive = true;
+      setTimeout(() => state.alert.isActive = false, 3000);
     }
   },
 

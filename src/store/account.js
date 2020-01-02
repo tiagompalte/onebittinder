@@ -1,4 +1,5 @@
 import AccountService from '../services/account_service';
+import store from './index';
 
 export default {
   state: {
@@ -15,6 +16,8 @@ export default {
       AccountService.login(email, password).then(user => {
         state.account = user;
         localStorage.setItem('account', JSON.stringify(user));
+      }, () => {
+        store.dispatch('Notification/alert', { type: 'danger', message: "Email or password wrong" });
       })
     },
 
