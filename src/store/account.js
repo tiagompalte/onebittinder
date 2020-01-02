@@ -1,5 +1,6 @@
 import AccountService from '../services/account_service';
 import store from './index';
+import router from '../router';
 
 export default {
   state: {
@@ -19,6 +20,11 @@ export default {
       }, () => {
         store.dispatch('Notification/alert', { type: 'danger', message: "Email or password wrong" });
       })
+    },
+
+    cleanLocalStorage(state) {
+      state.account = null;
+      localStorage.removeItem('account');
     },
 
     loadLocalStorageAccount(state) {
@@ -52,6 +58,11 @@ export default {
   actions: {
     login(context, { email, password }) {
       context.commit("performLogin", { email, password })
+    },
+
+    logout(context) {
+      context.commit("cleanLocalStorage");
+      router.push("/");
     },
 
     loadLocalAccount(context) {

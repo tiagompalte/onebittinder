@@ -8,10 +8,15 @@
       </swiper>
 
       <div class="columns is-mobile is-gapless is-centered action-buttons" v-if="isLoggedUser">
-        <div class="column is-12">
-          <router-link to="/profile/edit" class="button is-pulled-left is-info" >
+        <div class="column is-6">
+          <router-link to="/profile/edit" class="button is-pulled-left is-info">
             <i class="fas fa-edit"></i>
           </router-link>
+        </div>
+        <div class="column is-6">
+          <button class="button is-pulled-right is-danger" @click="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
         </div>
       </div>
 
@@ -26,11 +31,11 @@
       <div class="columns is-mobile is-gapless is-multiline user-info">
         <div class="column is-8">
           <h5 class="is-size-3"><strong>{{ currentUser.name }}</strong></h5>
-          <h5 class="is-size-5 has-text-grey">
+          <h5 class="is-size-5 has-text-grey" v-if="currentUser.company">
             <strong><i class="fas fa-building"></i></strong>
             {{ currentUser.company }}
           </h5>
-          <h5 class="is-size-5 has-text-grey">
+          <h5 class="is-size-5 has-text-grey" v-if="currentUser.college">
             <strong><i class="fas fa-university"></i></strong>
             {{ currentUser.college }}
           </h5>
@@ -89,7 +94,7 @@
 <script>
   import "swiper/dist/css/swiper.css";
   import { swiper, swiperSlide } from 'vue-awesome-swiper';
-  import { mapState } from 'vuex';
+  import { mapState, mapActions } from 'vuex';
   import router from '../router';
   import UserService from '../services/user_service';
 
@@ -140,7 +145,9 @@
 
       backToPreviousPage() {
         router.go(-1);
-      }
+      },
+
+      ...mapActions(['logout'])
     }
   }
 </script>
