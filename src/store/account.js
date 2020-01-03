@@ -17,8 +17,13 @@ export default {
       AccountService.login(email, password).then(user => {
         state.account = user;
         localStorage.setItem('account', JSON.stringify(user));
-      }, () => {
-        store.dispatch('Notification/alert', { type: 'danger', message: "Email or password wrong" });
+      }, error => {
+        console.log(error.response);
+        let message = 'Something wrong has happened';
+        if (error.response && error.response.data) {
+          message = error.response.data.error;
+        } 
+        store.dispatch('Notification/alert', { type: 'danger', message: message });
       })
     },
 
