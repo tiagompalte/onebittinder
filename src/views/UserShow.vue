@@ -1,11 +1,12 @@
 <template>
   <div>
     <div>
-      <swiper>
+      <swiper v-if="currentUser.photos && currentUser.photos.length > 0">
         <swiperSlide v-for="photo in currentUser.photos" :key="photo.url">
           <img :src="photo.url" >
         </swiperSlide>
       </swiper>
+      <img v-else src="@/assets/default-photo.png" alt="default" style="width: 100%" />
 
       <div class="columns is-mobile is-gapless is-centered action-buttons" v-if="isLoggedUser">
         <div class="column is-6">

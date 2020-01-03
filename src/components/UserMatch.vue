@@ -8,13 +8,14 @@
       </div>
       
       <div class="has-text-centered">
-        <img :src="user.default_photo_url" />
+        <img v-if="user.default_photo_url" :src="user.default_photo_url" />
+        <img v-else src="@/assets/default-photo.png" alt="default" style="width: 100%"/>
       </div>
 
       <div class="columns is-mobile is-gapless">
         <div class="column is-8">
           <h5 class="is-size-4"><strong>{{ user.name }}</strong></h5>
-          <h5 class="has-text-grey">
+          <h5 class="has-text-grey" v-if="user.college">
             <strong><i class="fas fa-university"></i></strong>
             {{ user.college }}
           </h5>

@@ -5,7 +5,22 @@
         <h1 class="title has-text-centered">Cadastro</h1>
         <div class="card">
           <div class="card-content">
-            <form @submit.prevent="signUp(name, email, password, passwordConfirmation )">
+            <form @submit.prevent="signUp(name, email, password, passwordConfirmation, photoToUpload)">
+
+              <div class="has-text-centered">
+                <img v-if="photoPreviewURL" :src="photoPreviewURL" alt="preview"/>
+                <img v-else src="@/assets/default-photo.png" alt="default"/>
+              </div>
+
+              <b-field class="file is-centered">
+                <b-upload v-model="photoToUpload">
+                  <a class="button is-primary">
+                    <b-icon icon="camera" pack="fas" size="is-small"></b-icon>
+                    <span>Adicionar nova foto</span>
+                  </a>
+                </b-upload>
+              </b-field>
+
               <b-field label="Nome">
                 <b-input v-model="name" type="text"></b-input>
               </b-field>
@@ -48,6 +63,7 @@
 import AccountService from '../services/account_service';
 import router from '../router';
 import store from '../store';
+import PhotoService from '../services/photo_service';
 
 export default {
   data() {
@@ -60,15 +76,27 @@ export default {
         email: [],
         password: [],
         passwordConfirmation: []
+      },
+      photoToUpload: null,
+      photoPreviewURL: '',
+    }
+  },
+
+  watch: {
+    photoToUpload(newValue) {
+      if(newValue) {
+        this.photoPreviewURL = URL.createObjectURL(newValue);
       }
     }
   },
 
   methods: {
-    signUp(name, email, password, passwordConfirmation) {
-      AccountService.signUp(name, email, password, passwordConfirmation).then(() => {
-        router.push("/login");
-        store.dispatch('Notification/alert', { type: 'success', message: "Cadastro realizado com sucesso" });
+    signUp(name, email, password, passwordConfirmation, photoToUpload) {
+      AccountService.signUp(name, email, password, passwordConfirmation).then(resp => {
+        PhotoService.addPhotoInSignUp(photoToUpload, email, resp.authentication_token).then(() => {
+          router.push("/login");
+          store.dispatch('Notification/alert', { type: 'success', message: "Cadastro realizado com sucesso" });
+        });
       }, (error) => {
         if(error.response) this.errors = error.response.data.errors;
       });
