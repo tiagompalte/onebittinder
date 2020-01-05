@@ -4,8 +4,13 @@
       <h1 class="subtitle has-text-centered">Chats</h1>
       <swiper :options="swiperOptions" v-if="chats.length > 0">
         <swiperSlide v-for="chat in chats" :key="chat.id">
-          <img :src="chat.matchee_photo_url" @click="openMenu(chat, 'chats')" />
-        </swiperSlide>    
+          <div v-if="chat.matchee_photo_url">
+            <img :src="chat.matchee_photo_url" @click="openMenu(chat, 'chats')" alt="chat"/>
+          </div>
+          <div v-else>
+            <img src="@/assets/default-photo.png" @click="openMenu(chat, 'chats')" alt="default" style="width: 100%" />
+          </div>
+        </swiperSlide>
 
         <div class="swiper-button-prev" slot="button-prev"></div>
         <div class="swiper-button-next" slot="button-next"></div>
@@ -20,8 +25,13 @@
       <h1 class="subtitle has-text-centered">Matches</h1>
       <swiper :options="swiperOptions" v-if="matches.length > 0">
         <swiperSlide v-for="match in matches" :key="match.id">
-          <img :src="match.matchee_photo_url" @click="openMenu(match, 'matches')" />
-        </swiperSlide>    
+          <div v-if="match.matchee_photo_url">
+            <img :src="match.matchee_photo_url" @click="openMenu(match, 'matches')" alt="match"/>
+          </div>
+          <div v-else>
+            <img src="@/assets/default-photo.png" @click="openMenu(match, 'matches')" alt="default" style="width: 100%" />
+          </div>
+        </swiperSlide>
 
         <div class="swiper-button-prev" slot="button-prev"></div>
         <div class="swiper-button-next" slot="button-next"></div>
@@ -35,11 +45,11 @@
         <div class="card-content">
           <div class="content">
             <div v-if="currentItem.type == 'matches'">
-              <a @click="startChat()">Iniciar chat</a>
+              <a @click="startChat(currentItem.id)">Iniciar chat</a>
               <hr />
             </div>
             <div v-if="currentItem.type == 'chats'">
-              <a @click="startChat()">Ir para Chat</a>
+              <a @click="startChat(currentItem.match_id)">Ir para Chat</a>
               <hr />
             </div>
             <a @click="unmatch()">Desfazer Match</a>
@@ -56,18 +66,15 @@
     margin: 5%;
     display: inline-block;
     text-align: center;
-    
     img {
       width: 80%;
       height: 5rem;
       border-radius: 50%;
     }
   }
-
   .slide {
     padding-left: 3rem;
     padding-right: 3rem;
-
     &:before {
       left: 0;
       top: 0;
@@ -78,21 +85,18 @@
 
 
 <script>
-
   import { swiper, swiperSlide } from 'vue-awesome-swiper';
+  import { mapState } from 'vuex';
   import MatchService from '../services/match_service';
-  import ChatService from '../services/chat_service';
-
+  import router from '../router';
+  import store from '../store';
   export default {
     components: {
       swiper,
       swiperSlide
     },
-
     data() {
       return {
-        chats: [],
-        matches: [],
         isMenuActive: false,
         currentItem: {},
         swiperOptions: {
@@ -103,33 +107,30 @@
         }
       }
     },
-
+    computed: {
+      ...mapState('Message', {
+        chats: state => state.chats,
+        matches: state => state.matches
+      })
+    },
     mounted() {
       this.loadMatches();
       this.loadChats();
     },
-
     methods: {
       openMenu(item, type) {
         this.isMenuActive = true;
         this.currentItem = item;
         this.currentItem.type = type;
       },
-
       closeMenu() {
         this.isMenuActive = false
       },
-
       loadMatches() {
-        MatchService.loadMyMatches().then(matches => {
-          this.matches = matches;
-        })
+        store.dispatch('Message/loadMatches')
       },
-
       loadChats() {
-        ChatService.load().then(chats => {
-          this.chats = chats;
-        })
+        store.dispatch('Message/getChats')
       },
       unmatch() {
         MatchService.unmatch(this.currentItem).then(() => {
@@ -138,6 +139,11 @@
           this[type].splice(indexToRemove, 1);
           this.closeMenu();
         });
+      },
+      
+      startChat(match_id) {
+        router.push('/messages')
+        store.dispatch('Message/setCurrentMatchId', { match_id: match_id })
       }
     }
   }

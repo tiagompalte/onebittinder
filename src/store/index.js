@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import Account from './account'
 import Notification from './notification'
 import Match from './match'
+import Message from './message'
 
 Vue.use(Vuex)
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
   modules: {
     Account,
     Notification,
-    Match
+    Match,
+    Message
   }
 })

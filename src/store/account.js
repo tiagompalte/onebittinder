@@ -18,7 +18,6 @@ export default {
         state.account = user;
         localStorage.setItem('account', JSON.stringify(user));
       }, error => {
-        console.log(error.response);
         let message = 'Something wrong has happened';
         if (error.response && error.response.data) {
           message = error.response.data.error;

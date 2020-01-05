@@ -24,6 +24,12 @@ export default {
       received(data) {
         this.alert({ type: 'success', message: data['message'] })
       }
+    },
+    ChatChannel: {
+      received(data) {
+        this.alert({ type: 'info', message: `Você recebeu uma mensage de ${data.messages[0].name}` })
+        this.pushMessage({ message: data })
+      }
     }
   },
 
@@ -47,12 +53,15 @@ export default {
 
   methods: {
     ...mapActions('Notification', ['alert']),
+    ...mapActions('Message', ['pushMessage']),
 
     performConnectionBasedOnToken(token) {
       if(token) { 
         this.$cable.subscribe({ channel: 'MatchNotificationChannel', token: token });
+        this.$cable.subscribe({ channel: 'ChatChannel', token: token });
       } else {
         this.$cable.unsubscribe('MatchNotificationChannel');
+        this.$cable.unsubscribe('ChatChannel');
       }
     }
   }

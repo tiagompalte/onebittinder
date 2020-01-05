@@ -8,7 +8,7 @@ import UserShow from '../views/UserShow';
 import ChatList from '../views/ChatList';
 import UserEdit from '../views/UserEdit';
 import BlockGeolocation from '../views/BlockGeolocation';
-
+import MessageShow from '../views/MessageShow';
 
 Vue.use(Router);
 
@@ -56,7 +56,13 @@ const router = new Router({
       path: '/block-geolocation',
       name: 'block_geolocation',
       component: BlockGeolocation
-    }  
+    },
+    {
+      path: '/messages',
+      name: 'messages',
+      props: true,
+      component: MessageShow
+    },
   ],
 });
 

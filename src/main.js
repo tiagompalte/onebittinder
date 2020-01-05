@@ -8,7 +8,13 @@ import store from './store';
 import 'buefy/dist/buefy.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './registerServiceWorker';
+import moment from 'moment';
 
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('DD/MM/YYYY HH:mm')
+  }
+});
 
 Vue.use(Buefy);
 Vue.use(ActionCableVue, { debug: true, debugLevel: 'error', connectionUrl: process.env.VUE_APP_WS })
